@@ -8,9 +8,9 @@
 * Text Domain:       kennykey
 */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 if(!defined('UPLOADSTORE_URL'))
 define('UPLOADSTORE_URL', plugin_dir_url( __FILE__ ));
@@ -30,9 +30,7 @@ class UploadStore
 
   public function __construct()
   {
-
     add_action( 'plugins_loaded', array($this, 'plugins_loaded') );
-
     $this->getUploadPreviewImage();
 
   }
@@ -397,13 +395,15 @@ class UploadStore
     if(is_product($post->ID) && get_post_meta($post->ID, "enable_agp_upload_template", true)){
       return true;
     }
+
     return false;
   }
 
   function product_page_template( $template ) {
+
 	if ($this->is_uploadstore_product()) {
-		$new_template = UPLOADSTORE_PATH."templates/pages/uploadstore.php";
-    if ( !empty( $new_template ) ) {
+		$new_template = UPLOADSTORE_PATH."/templates/pages/uploadstore.php";
+		if ( !empty( $new_template ) ) {
 			return $new_template;
 		}
 	}

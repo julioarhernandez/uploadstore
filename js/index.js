@@ -8,188 +8,189 @@ $(function () {
         $(".variations_form.cart").find("[name='attribute_pa_size'][value='"+size.toLowerCase()+"']").click();
       });
 
+      var img_url;
 
-        function loadEditor() {
-
-            if ($('.crop-select-js').length === 0) {
-                $('#crop-select').CropSelectJs({
-                    imageSrc: $('#crop-select').attr('data-src'),
-                    // Stub events
-                    selectionResize: function (e, a) {
-                        $('#crop-w').val(e.widthScaledToImage);
-                        $('#crop-h').val(e.heightScaledToImage);
-                    },
-                    selectionMove: function (e) {
-                        $('#crop-x').val(e.xScaledToImage);
-                        $('#crop-y').val(e.yScaledToImage);
-                    }
-                });
-            }
-
-            //
-            // Aspect Ratio Buttons
-            //
-
-           var caman = Caman('#editImage');
-
-            var applyFilters = function () {
-                caman.revert(false);
-                $('#photoFilters .slider').each(function () {
-                    var op = $(this).attr('id');
-                    var value = $(this).attr('data-val');
-                    if (value === 0) {
-                        return;
-                    }
-                    caman[op](value);
-                });
-            }
-
-            var resetFilters = function() {
-                $('#photoFilters .slider').each(function () {
-                    var op = $(this).attr('id');
-                    $('#' + op).slider('option', 'value', $(this).attr('data-val'));
-                });
-            }
-
-            $('.preset').click(function () {
-                // resetFilters();
-                var preset = $(this).attr('data-preset');
-                $('.preset').removeClass('active');
-                $(this).addClass('active');
-                caman.revert(true);
-                caman[preset]();
-                caman.render();
-            });
-
-            $('#reset').click(function () {
-                caman.reset();
-                caman.render();
-                resetFilters();
-                // $('#crop-select').removeClass('d-none');
-            });
-
-            $('#save').click( function () {
-                caman.render(function () {
-                    var image = this.toBase64();
-                    // saveToServer(image); // your ajax function
-                    // save edited
-
-                    //$('.upload-image-adjust-preview').attr('src', image)
-
-                    /**
-                     * var image - thows out the image data blob - can save to database
-                     */
-                });
-            });
-
-
-            // ENABLE CROP
-            $('#enable-crop').click(function () {
-                $('#crop-select').toggleClass('hidden-now');
-            })
-
-
-            $('#crop').click(function () {
-                    caman.reset();
-                    caman.revert();
-                    caman.render();
-                    caman.crop(
-                        $('#crop-w').val(),
-                        $('#crop-h').val(),
-                        $('#crop-x').val(),
-                        $('#crop-y').val()
-                    );
-                    applyFilters();
-                    caman.render();
-                    $('#crop-select').addClass('hidden-now')
-            });
-
-
-
-            $('#photoFilters .slider').each(function () {
-
-                var op = $(this).attr('id');
-
-                $('#' + op).slider({
-                    min: $(this).data('min'),
-                    max: $(this).data('max'),
-                    val: $(this).data('val'),
-                    change: function (e, ui) {
-                        $('#v-' + op).html(ui.value);
-                        $(this).attr('data-val', ui.value);
-
-                        if (e.originalEvent === undefined) {
-                            return;
-                        }
-
-                        applyFilters();
-                        caman.render();
-                    }
-                });
-            });
-
-        }
-        
-        var img_url;
-
-        $('#mainImage').fileupload({
+      $('#mainImage').fileupload({
         url: ajax_object.ajax_url,
         //dataType: 'json',
         dataType: 'text',
         processData: false,
         forceIframeTransport: true,
         submit: function(e, input){
-          //console.log(input)
-          if (input.files && input.files[0]) {
-              var reader = new FileReader();
-              $('#uploader-loader').addClass('uploading-show');
-              //upload(input.files[0]);
-              reader.readAsDataURL(input.files[0]);
-              reader.onload = function (e) {
-                  $('#uploader-loader img').attr('src', e.target.result);
-              }
-
-          }
-        },
-        //dropZone : $("#mainDropZone"),
-        dragover: function(e){
-          $('#dragOverlay').addClass('showUp');
-        },
-        formData: $('#uploadForm').serializeArray(),
-        done: function (e, data) {
-          var formVal = JSON.parse(data.result);
-            if (formVal.success) {
-                var original = formVal.data.original;
-                var thumbnail = formVal.data.thumbnail;
-                img_id = formVal.data.id;
-                img_type = formVal.data.type;
-                $("[name=cart-uploaded-image]").val(original);
-                if(img_type == "landscape"){
-                  $(".bc-main-container").removeClass("type-portrait");
-                  $(".bc-main-container").addClass("type-landscape");
-                } else {
-                  $(".bc-main-container").removeClass("type-landscape");
-                  $(".bc-main-container").addClass("type-portrait");
+        //console.log(input)
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                $('#uploader-loader').addClass('uploading-show');
+                //upload(input.files[0]);
+                reader.readAsDataURL(input.files[0]);
+                reader.onload = function (e) {
+                    $('#uploader-loader img').attr('src', e.target.result);
                 }
-                $("#editImage, .upload-image-adjust-preview").attr("src", thumbnail);
-                $(".img-crop-preview").attr("src", original);
-                $("#crop-select").attr("data-src", original);
-                $('#uploader-loader').removeClass('uploading-show');
 
-                $(".size-previews").each(function(){
-                  var size = $(this).data("size").toLowerCase();
-                  $(this).find("img").attr("src", "/?uploadpreview&upid="+img_id+"&uptype="+size);
-                });
-
-                $(".upload-section-upload").stop().fadeOut(function () {
-                  $(".upload-section-size").stop().fadeIn();
-                  $(".upload-tabs").removeClass("active");
-                  $(".upload-tab-size").addClass("active");
-                });
             }
-            $('#uploader-loader').removeClass('uploading-show');
+      },
+      //dropZone : $("#mainDropZone"),
+      dragover: function(e){
+        $('#dragOverlay').addClass('showUp');
+      },
+      formData: $('#uploadForm').serializeArray(),
+      done: function (e, data) {
+        var formVal = JSON.parse(data.result);
+          if (formVal.success) {
+              var original = formVal.data.original;
+              var thumbnail = formVal.data.thumbnail;
+              img_id = formVal.data.id;
+              img_type = formVal.data.type;
+              $("[name=cart-uploaded-image]").val(original);
+              if(img_type == "landscape"){
+                $(".bc-main-container").removeClass("type-portrait");
+                $(".bc-main-container").addClass("type-landscape");
+              } else {
+                $(".bc-main-container").removeClass("type-landscape");
+                $(".bc-main-container").addClass("type-portrait");
+              }
+              $("#editImage, .upload-image-adjust-preview").attr("src", thumbnail);
+              $(".img-crop-preview").attr("src", original);
+              $("#crop-select").attr("data-src", original);
+              $('#uploader-loader').removeClass('uploading-show');
+
+              $(".size-previews").each(function(){
+                var size = $(this).data("size").toLowerCase();
+                $(this).find("img").attr("src", "/?uploadpreview&upid="+img_id+"&uptype="+size);
+              });
+
+              $(".upload-section-upload").stop().fadeOut(function () {
+                $(".upload-section-size").stop().fadeIn();
+                $(".upload-tabs").removeClass("active");
+                $(".upload-tab-size").addClass("active");
+              });
           }
-        });
+          $('#uploader-loader').removeClass('uploading-show');
+        }
+      });
+
+        // function loadEditor() {
+
+        //     if ($('.crop-select-js').length === 0) {
+        //         $('#crop-select').CropSelectJs({
+        //             imageSrc: $('#crop-select').attr('data-src'),
+        //             // Stub events
+        //             selectionResize: function (e, a) {
+        //                 $('#crop-w').val(e.widthScaledToImage);
+        //                 $('#crop-h').val(e.heightScaledToImage);
+        //             },
+        //             selectionMove: function (e) {
+        //                 $('#crop-x').val(e.xScaledToImage);
+        //                 $('#crop-y').val(e.yScaledToImage);
+        //             }
+        //         });
+        //     }
+
+        //     //
+        //     // Aspect Ratio Buttons
+        //     //
+
+        //    var caman = Caman('#editImage');
+
+        //     var applyFilters = function () {
+        //         caman.revert(false);
+        //         $('#photoFilters .slider').each(function () {
+        //             var op = $(this).attr('id');
+        //             var value = $(this).attr('data-val');
+        //             if (value === 0) {
+        //                 return;
+        //             }
+        //             caman[op](value);
+        //         });
+        //     }
+
+        //     var resetFilters = function() {
+        //         $('#photoFilters .slider').each(function () {
+        //             var op = $(this).attr('id');
+        //             $('#' + op).slider('option', 'value', $(this).attr('data-val'));
+        //         });
+        //     }
+
+        //     $('.preset').click(function () {
+        //         // resetFilters();
+        //         var preset = $(this).attr('data-preset');
+        //         $('.preset').removeClass('active');
+        //         $(this).addClass('active');
+        //         caman.revert(true);
+        //         caman[preset]();
+        //         caman.render();
+        //     });
+
+        //     $('#reset').click(function () {
+        //         caman.reset();
+        //         caman.render();
+        //         resetFilters();
+        //         // $('#crop-select').removeClass('d-none');
+        //     });
+
+        //     $('#save').click( function () {
+        //         caman.render(function () {
+        //             var image = this.toBase64();
+        //             // saveToServer(image); // your ajax function
+        //             // save edited
+
+        //             //$('.upload-image-adjust-preview').attr('src', image)
+
+        //             /**
+        //              * var image - thows out the image data blob - can save to database
+        //              */
+        //         });
+        //     });
+
+
+        //     // ENABLE CROP
+        //     $('#enable-crop').click(function () {
+        //         $('#crop-select').toggleClass('hidden-now');
+        //     })
+
+
+        //     $('#crop').click(function () {
+        //             caman.reset();
+        //             caman.revert();
+        //             caman.render();
+        //             caman.crop(
+        //                 $('#crop-w').val(),
+        //                 $('#crop-h').val(),
+        //                 $('#crop-x').val(),
+        //                 $('#crop-y').val()
+        //             );
+        //             applyFilters();
+        //             caman.render();
+        //             $('#crop-select').addClass('hidden-now')
+        //     });
+
+
+
+        //     $('#photoFilters .slider').each(function () {
+
+        //         var op = $(this).attr('id');
+
+        //         $('#' + op).slider({
+        //             min: $(this).data('min'),
+        //             max: $(this).data('max'),
+        //             val: $(this).data('val'),
+        //             change: function (e, ui) {
+        //                 $('#v-' + op).html(ui.value);
+        //                 $(this).attr('data-val', ui.value);
+
+        //                 if (e.originalEvent === undefined) {
+        //                     return;
+        //                 }
+
+        //                 applyFilters();
+        //                 caman.render();
+        //             }
+        //         });
+        //     });
+
+        // }
+        
+       
 
         $('#fileupload').on('dragleave', function (e) {
           $('#dragOverlay').removeClass('showUp');
@@ -209,20 +210,20 @@ $(function () {
             });
         });
 
-        $(".upload-edit-photo").click(function () {
-            $(".upload-section").stop().fadeOut(function () {
-                $(".upload-tabs").removeClass("active");
-                $(".upload-tab-adjust").addClass("active");
-                $(".upload-section-edit").stop().fadeIn();
-                loadEditor();
-            });
-        });
+        // $(".upload-edit-photo").click(function () {
+        //     $(".upload-section").stop().fadeOut(function () {
+        //         $(".upload-tabs").removeClass("active");
+        //         $(".upload-tab-adjust").addClass("active");
+        //         $(".upload-section-edit").stop().fadeIn();
+        //         loadEditor();
+        //     });
+        // });
 
-        $(".upload-edit-save").click(function () {
-            $(".upload-section").stop().fadeOut(function () {
-                $(".upload-section-adjust").stop().fadeIn();
-            });
-        });
+        // $(".upload-edit-save").click(function () {
+        //     $(".upload-section").stop().fadeOut(function () {
+        //         $(".upload-section-adjust").stop().fadeIn();
+        //     });
+        // });
 
         $(".upload-tab-upload").click(function () {
             $(".upload-section").stop().fadeOut(function () {
