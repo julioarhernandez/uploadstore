@@ -9,6 +9,8 @@
   <form action="" enctype="multipart/form-data" id="uploadForm">
     <input type="hidden" name="action" value="upload_preview" />
     <input type="hidden" name="nonce" value="<?= wp_create_nonce('preview_image') ?>" />
+    <input type="hidden" name="imageWidth" value="" />
+    <input type="hidden" name="imageHeight" value="" />
       <div class="row mt-5">
 
           <!-- FIRST COL -->
