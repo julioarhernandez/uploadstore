@@ -16,6 +16,7 @@ $(function () {
         dataType: 'text',
         processData: false,
         forceIframeTransport: true,
+        formData: $('#uploadForm').serializeArray(),
         submit: function(e, input){
         //console.log(input)
             if (input.files && input.files[0]) {
@@ -25,15 +26,16 @@ $(function () {
                 reader.readAsDataURL(input.files[0]);
                 reader.onload = function (e) {
                     $('#uploader-loader img').attr('src', e.target.result);
+                    // Set input hidden field images values
+                    $('.imageWidth').val($('#uploader-loader img')[0].naturalWidth);
+                    $('.imageHeight').val($('#uploader-loader img')[0].naturalHeight);
                 }
-
             }
       },
       //dropZone : $("#mainDropZone"),
       dragover: function(e){
         $('#dragOverlay').addClass('showUp');
       },
-      formData: $('#uploadForm').serializeArray(),
       done: function (e, data) {
         var formVal = JSON.parse(data.result);
           if (formVal.success) {

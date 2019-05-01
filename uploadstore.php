@@ -372,14 +372,14 @@ class UploadStore
   }
 
   function plugins_loaded(){
+    // Replace template file for a new template in pages/uploadstore.php
     add_filter( 'template_include', array($this, 'product_page_template'), 99 );
     //add_action( 'wp_enqueue_scripts', array($this, 'load_scripts') );
     //add_action( 'wp_enqueue_scripts', array($this, 'load_styles') );
 
-    //if(is_page("upload")){
-      add_action('wp_enqueue_scripts', array($this, 'include_styles'));
-      add_action('wp_enqueue_scripts', array($this, 'include_scripts'));
-    //}
+    // Enqueue styles for upload page template
+    add_action('wp_enqueue_scripts', array($this, 'include_styles'));
+    add_action('wp_enqueue_scripts', array($this, 'include_scripts'));
 
     add_action( 'admin_init', array($this, 'hide_editor') );
     add_action( 'wp_ajax_nopriv_upload_preview', array($this, 'upload_preview') );
@@ -392,7 +392,8 @@ class UploadStore
 
   function is_uploadstore_product(){
     global $post;
-    if(is_product($post->ID) && get_post_meta($post->ID, "enable_agp_upload_template", true)){
+
+    if($post && is_product($post->ID) && get_post_meta($post->ID, "enable_agp_upload_template", true)){
       return true;
     }
 
@@ -514,9 +515,6 @@ function cart_uploaded_image_order_items( $item, $cart_item_key, $values, $order
 
 
   function upload_preview(){
-
-
-
     $wp_upload_paths = wp_upload_dir();
     $upload_path = $wp_upload_paths["basedir"];
     $upload_url = $wp_upload_paths["baseurl"];
@@ -530,7 +528,13 @@ function cart_uploaded_image_order_items( $item, $cart_item_key, $values, $order
       }
     }
 
+    if(!empty($_POST["imageWidth"]) && !empty($_POST["imageHeight"])){
+        $imageWidth = $_POST["imageWidth"];
+        $imageHeight = $_POST["imageHeight"];
+    }
+
     if(!empty($_FILES["image"]) && !empty($_FILES["image"]["tmp_name"])){
+      printf($_FILES["image"]);  
       $tmp_file_name = $_FILES['image']['name'];
       $tmp_file_path = $_FILES['image']['tmp_name'];
       $file_type = $_FILES['image']['type'];
@@ -557,17 +561,17 @@ function cart_uploaded_image_order_items( $item, $cart_item_key, $values, $order
 
       $img_size = "portrait";
 
-      $im = new Imagick();
-      $im->readImage( $tmp_file_path );
-      $width = $im->getImageWidth();
-      $height = $im->getImageHeight();
-      $im->setImageFormat("jpg");
-      $im->writeImage( $new_file_path );
-      $im->destroy();
+    //   $im = new Imagick();
+    //   $im->readImage( $tmp_file_path );
+    //   $width = $im->getImageWidth();
+    //   $height = $im->getImageHeight();
+    //   $im->setImageFormat("jpg");
+    //   $im->writeImage( $new_file_path );
+    //   $im->destroy();
 
-      unlink($tmp_file_path);
+    //   unlink($tmp_file_path);
 
-      if($width > $height){
+      if($imageWidth > $imageHeight){
         $img_size = "landscape";
       }
 
