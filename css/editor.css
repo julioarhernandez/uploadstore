@@ -1,0 +1,155 @@
+#imageEditor{
+    max-width: 600px;
+    width: 600px;
+    position: relative;
+}
+
+#imageEditor .card-body{
+    position: relative;
+}
+
+#PresetFilters .panel .active{
+    background: gray !important;
+    border-color: gray !important;
+    box-shadow: none !important;
+}
+
+.crop-image{
+   width: 600px;
+}
+
+
+@media(max-width: 992px){
+    #imageEditor {
+        max-width: 500px;
+        width: 500px;
+    }
+
+  .crop-image {
+      width: 500px;
+  }
+}
+
+@media(max-width: 790px) {
+    #editor-col{
+        order: -1;
+    }
+
+    #PresetFilters #finalize{
+       order: 1
+
+    }
+}
+
+@media(max-width: 580px) {
+    #imageEditor {
+        max-width: 500px;
+        width: 500px;
+    }
+
+    .crop-image {
+        width: 500px;
+    }
+}
+
+@media(max-width: 480px) {
+    #imageEditor {
+        max-width: 350px;
+        width: 350px;
+    }
+
+    .crop-image {
+        width: 350px;
+    }
+}
+
+@media(max-width: 380px) {
+    #imageEditor {
+        max-width: 350px;
+        width: 320px;
+    }
+
+    .crop-image {
+        width: 320px;
+    }
+}
+
+
+#crop-select {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    z-index: 10000;
+}
+
+#PresetFilters{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    border: 1px solid #187cff !important;
+    background: #187cff url("images/ui-bg_glass_75_e6e6e6_1x400.png.html") 50% 50% repeat-x;
+    color: #555555 !important;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+}
+
+.ui-state-default:hover,
+.ui-widget-content .ui-state-default:hover,
+.ui-widget-header .ui-state-default:hover{
+    background: #0054c2 url("images/ui-bg_glass_75_e6e6e6_1x400.png.html") 50% 50% repeat-x;
+}
+
+.ui-widget-content {
+    border: none !important;
+    background: url("images/ui-bg_flat_75_ffffff_40x100.png.html") 50% 50% repeat-x rgb(9, 45, 78);
+}
+
+.ui-slider-horizontal {
+    height: 5px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+    top: -10px;
+}
+
+.grouper{
+    padding: 5px 0;
+}
+
+#filterbtns{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#filterbtns button{
+    flex-grow: 1;
+    margin: 2px !important;
+}
+
+
+.flex-it {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-it button {
+    flex-grow: 1;
+    margin: 2px !important;
+}
+
+.hidden-now{
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+}

@@ -1,0 +1,126 @@
+.upload-section.upload-section-size,
+.upload-section.upload-section-adjust,
+.upload-section.upload-section-edit {
+  display: none;
+}
+
+.upload-tabs {
+  cursor: pointer;
+}
+
+.site-content {
+    padding: 0 !important;
+}
+
+.single_add_to_cart_button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+}
+
+th:first-child, td:first-child {
+      width: 120px;
+}
+
+.ed__variation__radio__wrp {
+    margin-top: 15px;
+}
+
+a.reset_variations {
+    display: block;
+    margin-top: 25px;
+    color: #187cff !important;
+    font-weight: 600;
+}
+
+td#ed_wc_pa_size {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ed__variation__button__wrp {
+    flex-grow: 1;
+}
+
+.ed__variation__button__wrp label {
+  padding: 40px !important;
+color: #0578ff !important;
+}
+
+.ed__variation__button__wrp label.active {
+    border: 1px solid #0578ff !important;
+}
+
+.type-portrait .preview-type-landscape {
+  display: none;
+}
+
+.type-landscape .preview-type-portrait {
+  display: none;
+}
+
+.final-step .active .preview,
+.final-step .is-active .preview,
+.final-step .is-selected .preview {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.final-step .active .preview img,
+.final-step .is-active .preview img,
+.final-step .is-selected .preview img {
+  -webkit-box-shadow: 0 4px 40px -2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 40px -2px rgba(0, 0, 0, 0.6);
+}
+
+.size-previews {
+  cursor: pointer;
+}
+
+div#bc-mainContainer {
+    max-width: 100%;
+    flex-basis: 100%;
+    width: 100%;
+    background: none !important;
+}
+
+div#bc-mainContainer .col-md-10{
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+    width: 100%;
+}
+
+div#bc-mainContainer .bc-breadcrumb{
+    background: none !important;
+}
+
+.variations_form.cart tr {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.variations_form.cart td {
+    border: none;
+}
+
+.quantity input {
+    color: #000;
+    width: auto;
+    margin: 10px 0;
+}
+
+@media(max-width: 480px) {
+  .page-template-uploadstore .container .row{
+        margin: 0 !important;
+  }
+  #mainDropZone .info {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+body .page-template-uploadstore #content > .container.content-wrapper,
+.page-template-uploadstore #content > .container.content-wrapper {
+    width: 100% !important;
+}
