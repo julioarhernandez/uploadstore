@@ -42,6 +42,7 @@ class UploadStore
       $upload_url = $wp_upload_paths["baseurl"];
       $preview_upload_path = $upload_path . "/previews";
       $preview_upload_url = $upload_url . "/previews";
+      $file_thumb = $preview_upload_path."/".$_GET["upid"]."_thumb.jpg";
       $file = $preview_upload_path."/".$_GET["upid"].".jpg";
 
       if(file_exists($file)){
@@ -52,7 +53,7 @@ class UploadStore
             echo file_get_contents($file);
             break;
           default:
-            $img = $this->getImageBySize($file, $_GET["uptype"]);
+            $img = $this->getImageBySize($file_thumb, $_GET["uptype"]);
             if($img){ echo $img; }
         }
       }
@@ -60,7 +61,7 @@ class UploadStore
     }
   }
 
-  function getHorizontalSize($size){
+    private function getHorizontalSize($size){
     $width = 405;
     $height = 405;
 
@@ -75,16 +76,6 @@ class UploadStore
           $height = get_field("landscape_xsmall_height", "cpt_product");
         }
         break;
-      case "small":
-        $width = 90;
-        $height = 55;
-        if(get_field("landscape_small_width", "cpt_product") && get_field("landscape_small_width", "cpt_product") !== ""){
-          $width = get_field("landscape_small_width", "cpt_product");
-        }
-        if(get_field("landscape_small_height", "cpt_product") && get_field("landscape_small_height", "cpt_product") !== ""){
-          $height = get_field("landscape_small_height", "cpt_product");
-        }
-        break;
       case "medium":
         $width = 109;
         $height = 75;
@@ -95,47 +86,8 @@ class UploadStore
           $height = get_field("landscape_medium_height", "cpt_product");
         }
         break;
-      case "standard":
-        $width = 155;
-        $height = 95;
-        if(get_field("landscape_standard_width", "cpt_product") && get_field("landscape_standard_width", "cpt_product") !== ""){
-          $width = get_field("landscape_standard_width", "cpt_product");
-        }
-        if(get_field("landscape_standard_height", "cpt_product") && get_field("landscape_standard_height", "cpt_product") !== ""){
-          $height = get_field("landscape_standard_height", "cpt_product");
-        }
-        break;
-      case "classic":
-        $width = 193;
-        $height = 115;
-        if(get_field("landscape_classic_width", "cpt_product") && get_field("landscape_classic_width", "cpt_product") !== ""){
-          $width = get_field("landscape_classic_width", "cpt_product");
-        }
-        if(get_field("landscape_classic_height", "cpt_product") && get_field("landscape_classic_height", "cpt_product") !== ""){
-          $height = get_field("landscape_classic_height", "cpt_product");
-        }
-        break;
-      case "traditional":
-        $width = 220;
-        $height = 135;
-        if(get_field("landscape_traditional_width", "cpt_product") && get_field("landscape_traditional_width", "cpt_product") !== ""){
-          $width = get_field("landscape_traditional_width", "cpt_product");
-        }
-        if(get_field("landscape_traditional_height", "cpt_product") && get_field("landscape_traditional_height", "cpt_product") !== ""){
-          $height = get_field("landscape_traditional_height", "cpt_product");
-        }
-        break;
-      case "large":
-        $width = 230;
-        $height = 145;
-        break;
-        if(get_field("landscape_large_width", "cpt_product") && get_field("landscape_large_width", "cpt_product") !== ""){
-          $width = get_field("landscape_large_width", "cpt_product");
-        }
-        if(get_field("landscape_large_height", "cpt_product") && get_field("landscape_large_height", "cpt_product") !== ""){
-          $height = get_field("landscape_large_height", "cpt_product");
-        }
       case "xlarge":
+      case "traditional":
         $width = 232;
         $height = 175;
         if(get_field("landscape_xlarge_width", "cpt_product") && get_field("landscape_xlarge_width", "cpt_product") !== ""){
@@ -146,6 +98,10 @@ class UploadStore
         }
         break;
       case "xxlarge":
+      case "small":
+      case "standard":
+      case "classic":
+      case "large":
         $width = 260;
         $height = 165;
         if(get_field("landscape_xxlarge_width", "cpt_product") && get_field("landscape_xxlarge_width", "cpt_product") !== ""){
@@ -169,7 +125,7 @@ class UploadStore
     ];
   }
 
-  function getVerticalSize($size){
+  private function getVerticalSize($size){
     $width = 460;
     $height = 460;
 
@@ -278,7 +234,225 @@ class UploadStore
     ];
   }
 
-  function getImageBySize($file, $size){
+  // private function getHorizontalSize($size){
+  //   $width = 405;
+  //   $height = 405;
+
+  //   switch($size){
+  //     case "xsmall":
+  //       $width = 70;
+  //       $height = 55;
+  //       if(get_field("landscape_xsmall_width", "cpt_product") && get_field("landscape_xsmall_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_xsmall_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_xsmall_height", "cpt_product") && get_field("landscape_xsmall_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_xsmall_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "small":
+  //       $width = 90;
+  //       $height = 55;
+  //       if(get_field("landscape_small_width", "cpt_product") && get_field("landscape_small_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_small_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_small_height", "cpt_product") && get_field("landscape_small_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_small_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "medium":
+  //       $width = 109;
+  //       $height = 75;
+  //       if(get_field("landscape_medium_width", "cpt_product") && get_field("landscape_medium_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_medium_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_medium_height", "cpt_product") && get_field("landscape_medium_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_medium_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "standard":
+  //       $width = 155;
+  //       $height = 95;
+  //       if(get_field("landscape_standard_width", "cpt_product") && get_field("landscape_standard_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_standard_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_standard_height", "cpt_product") && get_field("landscape_standard_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_standard_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "classic":
+  //       $width = 193;
+  //       $height = 115;
+  //       if(get_field("landscape_classic_width", "cpt_product") && get_field("landscape_classic_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_classic_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_classic_height", "cpt_product") && get_field("landscape_classic_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_classic_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "traditional":
+  //       $width = 220;
+  //       $height = 135;
+  //       if(get_field("landscape_traditional_width", "cpt_product") && get_field("landscape_traditional_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_traditional_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_traditional_height", "cpt_product") && get_field("landscape_traditional_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_traditional_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "large":
+  //       $width = 230;
+  //       $height = 145;
+  //       break;
+  //       if(get_field("landscape_large_width", "cpt_product") && get_field("landscape_large_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_large_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_large_height", "cpt_product") && get_field("landscape_large_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_large_height", "cpt_product");
+  //       }
+  //     case "xlarge":
+  //       $width = 232;
+  //       $height = 175;
+  //       if(get_field("landscape_xlarge_width", "cpt_product") && get_field("landscape_xlarge_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_xlarge_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_xlarge_height", "cpt_product") && get_field("landscape_xlarge_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_xlarge_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "xxlarge":
+  //       $width = 260;
+  //       $height = 165;
+  //       if(get_field("landscape_xxlarge_width", "cpt_product") && get_field("landscape_xxlarge_width", "cpt_product") !== ""){
+  //         $width = get_field("landscape_xxlarge_width", "cpt_product");
+  //       }
+  //       if(get_field("landscape_xxlarge_height", "cpt_product") && get_field("landscape_xxlarge_height", "cpt_product") !== ""){
+  //         $height = get_field("landscape_xxlarge_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "thumbnail":
+  //       return file_get_contents($file);
+  //       break;
+  //     default:
+  //       $width = 405;
+  //       $height = 405;
+  //   }
+
+  //   return [
+  //     "width" => $width,
+  //     "height" =>  $height
+  //   ];
+  // }
+
+  // private function getVerticalSize($size){
+  //   $width = 460;
+  //   $height = 460;
+
+  //   switch($size){
+  //     case "xsmall":
+  //       $width = 90;
+  //       $height = 125;
+  //       if(get_field("portrait_xsmall_width", "cpt_product") && get_field("portrait_xsmall_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_xsmall_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_xsmall_height", "cpt_product") && get_field("portrait_xsmall_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_xsmall_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "small":
+  //       $width = 90;
+  //       $height = 155;
+  //       if(get_field("portrait_small_width", "cpt_product") && get_field("portrait_small_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_small_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_small_height", "cpt_product") && get_field("portrait_small_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_small_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "medium":
+  //       $width = 110;
+  //       $height = 174;
+  //       if(get_field("portrait_medium_width", "cpt_product") && get_field("portrait_medium_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_medium_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_medium_height", "cpt_product") && get_field("portrait_medium_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_medium_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "standard":
+  //       $width = 130;
+  //       $height = 220;
+  //       if(get_field("portrait_standard_width", "cpt_product") && get_field("portrait_standard_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_standard_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_standard_height", "cpt_product") && get_field("portrait_standard_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_standard_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "classic":
+  //       $width = 150;
+  //       $height = 258;
+  //       if(get_field("portrait_classic_width", "cpt_product") && get_field("portrait_classic_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_classic_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_classic_height", "cpt_product") && get_field("portrait_classic_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_classic_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "traditional":
+  //       $width = 170;
+  //       $height = 258;
+  //       if(get_field("portrait_traditional_width", "cpt_product") && get_field("portrait_traditional_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_traditional_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_traditional_height", "cpt_product") && get_field("portrait_traditional_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_traditional_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "large":
+  //       $width = 180;
+  //       $height = 295;
+  //       if(get_field("portrait_large_width", "cpt_product") && get_field("portrait_large_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_large_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_large_height", "cpt_product") && get_field("portrait_large_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_large_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "xlarge":
+  //       $width = 210;
+  //       $height = 297;
+  //       if(get_field("portrait_xlarge_width", "cpt_product") && get_field("portrait_xlarge_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_xlarge_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_xlarge_height", "cpt_product") && get_field("portrait_xlarge_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_xlarge_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "xxlarge":
+  //       $width = 200;
+  //       $height = 325;
+  //       if(get_field("portrait_xxlarge_width", "cpt_product") && get_field("portrait_xxlarge_width", "cpt_product") !== ""){
+  //         $width = get_field("portrait_xxlarge_width", "cpt_product");
+  //       }
+  //       if(get_field("portrait_xxlarge_height", "cpt_product") && get_field("portrait_xxlarge_height", "cpt_product") !== ""){
+  //         $height = get_field("portrait_xxlarge_height", "cpt_product");
+  //       }
+  //       break;
+  //     case "thumbnail":
+  //       return file_get_contents($file);
+  //       break;
+  //     default:
+  //       $width = 460;
+  //       $height = 460;
+  //   }
+
+  //   return [
+  //     "width" =>  $width,
+  //     "height" =>  $height
+  //   ];
+  // }
+
+  private function getImageBySize($file, $size){
     $im = new Imagick();
     $im->readImage( $file );
     $img_width = $im->getImageWidth();
@@ -332,9 +506,6 @@ class UploadStore
     return $col;
   }
 
-  function init(){
-
-  }
 
   function include_scripts(){
     if($this->is_uploadstore_product()){
@@ -546,28 +717,31 @@ function cart_uploaded_image_order_items( $item, $cart_item_key, $values, $order
       /*if($file_type == "image/png"){
         $extension = ".png";
       }*/
-
-      $unique_filename = uniqid()."-".date("Y-m-d");
+      $unique_id = uniqid();
+      $unique_filename = $unique_id."-".date("Y-m-d");
+      $unique_filename_thumb = $unique_filename."_thumb";
 
       $filename = $unique_filename.$extension;
+      $filename_thumb = $unique_filename_thumb.$extension;
+      
       $new_file_path = $preview_upload_path."/".$filename;
+      $new_file_path_thumb = $preview_upload_path."/".$filename_thumb;
 
       if(!file_exists($preview_upload_path)){
         mkdir($preview_upload_path);
       }
 
-      //copy($tmp_file_path, $new_file_path);
-      //unlink($tmp_file_path);
+      copy($tmp_file_path, $new_file_path);
+      // unlink($tmp_file_path);
 
       $img_size = "portrait";
 
-    //   $im = new Imagick();
-    //   $im->readImage( $tmp_file_path );
-    //   $width = $im->getImageWidth();
-    //   $height = $im->getImageHeight();
-    //   $im->setImageFormat("jpg");
-    //   $im->writeImage( $new_file_path );
-    //   $im->destroy();
+      $im = new Imagick();
+      $im->readImage( $tmp_file_path );
+      $im->setImageFormat("jpg");
+      $im->resizeImage(400,0,Imagick::FILTER_LANCZOS,1);
+      $im->writeImage( $new_file_path_thumb );
+      $im->destroy();
 
     //   unlink($tmp_file_path);
 

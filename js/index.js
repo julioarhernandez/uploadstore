@@ -9,6 +9,18 @@ $(function () {
       });
 
       var img_url;
+      $('#mainImage').bind('fileuploadprogress', function (e, data) {
+        // Log the current bitrate for this upload:
+        console.log(data.bitrate);
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        console.log(progress)
+        $('#progress .bar').css(
+            'width',
+            progress + '%'
+        );
+    });
+
+
 
       $('#mainImage').fileupload({
         url: ajax_object.ajax_url,
@@ -31,14 +43,26 @@ $(function () {
                     $('.imageHeight').val($('#uploader-loader img')[0].naturalHeight);
                 }
             }
+            var overallProgress = $('#mainImage').fileupload('progress');
+            console.log(overallProgress)
       },
+      progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        console.log(progress)
+        $('#progress .bar').css(
+            'width',
+            progress + '%'
+        );
+    },
       //dropZone : $("#mainDropZone"),
       dragover: function(e){
         $('#dragOverlay').addClass('showUp');
       },
       done: function (e, data) {
-        var formVal = JSON.parse(data.result);
-          if (formVal.success) {
+        var formVal = data && data.result;
+        formVal = formVal.replace('Array', '');
+        formVal = JSON.parse(formVal);
+        if (formVal.success) {
               var original = formVal.data.original;
               var thumbnail = formVal.data.thumbnail;
               img_id = formVal.data.id;
@@ -70,6 +94,8 @@ $(function () {
           $('#uploader-loader').removeClass('uploading-show');
         }
       });
+
+
 
         // function loadEditor() {
 

@@ -55,6 +55,9 @@
         <img alt="">
         <p class="text-white mt-2 weight-600 h4">Uploading...</p>
     </div>
+    <div id="progress">
+        <div class="bar" style="width: 0%;"></div>
+    </div>
 </div>
 
 <div class="modal" id="faqModal">
